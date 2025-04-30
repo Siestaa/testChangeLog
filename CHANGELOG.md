@@ -1,5 +1,12 @@
 # test-changelog-vite
 
+## 0.0.4
+
+### Patch Changes
+
+- feat: Add text
+- add more text
+
 ## 0.0.3
 
 ### Patch Changes
