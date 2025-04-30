@@ -1,0 +1,25 @@
+stages:
+  - release
+
+release:
+  image: node:18
+  variables:
+    GIT_STRATEGY: clone
+    GIT_CHECKOUT: "true"
+  before_script:
+    - npm ci
+    - git config --global user.email "ci@example.com"
+      git config --global user.name "GitLab CI"
+    # Установите changesets глобально
+    - npm install -g @changesets/cli
+  script:
+    - |
+      # Обновляем версии и changelog
+      changeset version
+      git add .
+      git commit -m "[skip ci] Update versions and changelog"
+
+      # Пушим изменения
+      git push origin main
+  only:
+    - main
