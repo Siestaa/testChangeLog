@@ -1,5 +1,12 @@
 # test-changelog-vite
 
+## 0.0.6
+
+### Patch Changes
+
+- 3c96dd8: 2020 - add style number
+- 1de7e94: 2020 - Add number
+
 ## 0.0.5
 
 ### Patch Changes
