@@ -11,6 +11,7 @@ function App() {
      <div>some text more</div>
      <div className="text">2020</div>
      <div className="text">2034</div>
+     <div className="">Special Text</div>
     </>
   )
 }
