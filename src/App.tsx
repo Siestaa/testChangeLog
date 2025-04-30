@@ -9,6 +9,7 @@ function App() {
      <div className="">I'm 12 year old</div>
      <div className="">some text</div>
      <div>some text more</div>
+     <div className="text">2020</div>
     </>
   )
 }
