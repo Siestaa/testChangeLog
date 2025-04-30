@@ -1,5 +1,16 @@
 # test-changelog-vite
 
+## 0.1.0
+
+### Minor Changes
+
+- a7425da: 2034 - Add special text
+
+### Patch Changes
+
+- fix: fix changelog config
+- fcff7fe: 2034 - add number text
+
 ## 0.0.6
 
 ### Patch Changes
