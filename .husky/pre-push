@@ -57,7 +57,7 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   # Добавляем изменённый changeset-файл в коммит
   git add .
 
-  git commit "changelog update" --no-verify
+  git commit -m "changelog update" --no-verify
 
   # Получаем имя текущей ветки
   CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
