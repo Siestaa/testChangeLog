@@ -13,6 +13,7 @@ function App() {
      <div className="text">2034</div>
      <div className="">Special Text</div>
      <div className="">Final test</div>
+     <div className="">Test pre commit</div>
     </>
   )
 }
