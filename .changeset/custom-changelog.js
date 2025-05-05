@@ -1,4 +1,4 @@
-const { generateChangelog } = await import('@changesets/changelog');
+import {generateChangelog} from "@changesets/changelog"
 
 module.exports = async function (changesets, releasePlan, options) {
   const result = await generateChangelog(changesets, releasePlan, options);
