@@ -1,20 +1,9 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-echo "📎 HUSKY_GIT_PARAMS: $HUSKY_GIT_PARAMS"
-
 if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
   echo "✅ Хук пропущен (использован --no-verify)"
   exit 0
-fi
-
-# Получаем сообщение текущего коммита из временного файла
-if [ -f ".git/COMMIT_EDITMSG" ]; then
-  COMMIT_MSG=$(cat .git/COMMIT_EDITMSG)
-  echo "📎 Текущее сообщение коммита: $COMMIT_MSG"
-else
-  COMMIT_MSG="feat: unknown commit message"
-  echo "⚠️ Не удалось найти .git/COMMIT_EDITMSG"
 fi
 
 # Получаем текущую ветку
@@ -24,6 +13,7 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   echo "🔄 Запускаем npx changeset для ветки $CURRENT_BRANCH"
   
+  # Запускаем changeset
   npx changeset --empty
 
   sleep 1
@@ -34,16 +24,20 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
 
   echo "📄 Найден файл: $CHANGESET_FILE"
 
+  # Получаем сообщение **последнего коммита**
+  COMMIT_MSG=$(git log -1 --pretty=%B)
+
+  # Добавляем минимум 5 строк, если их нет
   FILE_LINES=$(wc -l < "$CHANGESET_FILE")
   while [ $FILE_LINES -lt 5 ]; do
     echo "" >> "$CHANGESET_FILE"
     FILE_LINES=$((FILE_LINES + 1))
   done
 
-  # Добавляем строку на 2-ю позицию через awk
+  # Добавляем строку на 2-ю позицию
   awk 'NR == 2 { print "\"test-changelog-vite\": patch" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 
-  # Добавляем сообщение на 5-ю позицию через awk
+  # Добавляем сообщение на 5-ю позицию
   awk -v msg="$COMMIT_MSG" 'NR == 5 { print msg } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 
   git add "$CHANGESET_FILE"
