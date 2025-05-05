@@ -6,7 +6,14 @@ if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
   exit 0
 fi
 
-echo "$HUSKY_GIT_PARAMS" | grep -q ' -m ';
+# Получаем сообщение текущего коммита из временного файла
+if [ -f ".git/COMMIT_EDITMSG" ]; then
+  COMMIT_MSG=$(cat .git/COMMIT_EDITMSG)
+  echo "📎 Текущее сообщение коммита: $COMMIT_MSG"
+else
+  COMMIT_MSG="feat: unknown commit message"
+  echo "⚠️ Не удалось найти .git/COMMIT_EDITMSG"
+fi
 
 # Получаем текущую ветку
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
@@ -15,7 +22,6 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   echo "🔄 Запускаем npx changeset для ветки $CURRENT_BRANCH"
   
-  # Запускаем changeset
   npx changeset --empty
 
   sleep 1
@@ -26,19 +32,16 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
 
   echo "📄 Найден файл: $CHANGESET_FILE"
 
-  # Получаем сообщение **последнего коммита**
-  COMMIT_MSG=$(git log -1 --pretty=%B)
-
   FILE_LINES=$(wc -l < "$CHANGESET_FILE")
   while [ $FILE_LINES -lt 5 ]; do
     echo "" >> "$CHANGESET_FILE"
     FILE_LINES=$((FILE_LINES + 1))
   done
 
-  # Добавляем строку на 2-ю позицию
+  # Добавляем строку на 2-ю позицию через awk
   awk 'NR == 2 { print "\"test-changelog-vite\": patch" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 
-  # Добавляем сообщение на 5-ю позицию
+  # Добавляем сообщение на 5-ю позицию через awk
   awk -v msg="$COMMIT_MSG" 'NR == 5 { print msg } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 
   git add "$CHANGESET_FILE"
