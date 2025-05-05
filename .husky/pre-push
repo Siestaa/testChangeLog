@@ -87,8 +87,6 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
 
   # Добавляем файл и делаем коммит
   git add "$CHANGESET_FILE"
-  git commit -m "changelog update" --no-verify
-      echo "📤 Выполняем git commit 'changelog update'"
 else
   echo "ℹ️ Ветка $CURRENT_BRANCH не соответствует pattern 'feature/*' — changeset не обрабатывается"
 fi
