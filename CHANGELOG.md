@@ -1,5 +1,16 @@
 # test-changelog-vite
 
+## 2.1.0
+
+### Minor Changes
+
+- dda9409: add fix text
+- 72480d8: add testiruem text
+
+### Patch Changes
+
+- Merge branch 'main' into feature/testiruem
+
 ## 2.0.0
 
 ### Major Changes
