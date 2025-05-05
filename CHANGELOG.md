@@ -1,5 +1,11 @@
 # test-changelog-vite
 
+## 1.0.2
+
+### Patch Changes
+
+- 31026da: fix md files
+
 ## 1.0.1
 
 ### Patch Changes
