@@ -1,5 +1,5 @@
 {
-  "changelog": "./custom-changelog.js",
+  "changelog": "./custom-changelog.cjs",
   "commit": false,
   "fixed": [],
   "linked": [],

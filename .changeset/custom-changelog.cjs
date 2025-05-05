@@ -1,4 +1,4 @@
-import {generateChangelog} from "@changesets/changelog"
+const { generateChangelog } = require('@changesets/changelog');
 
 module.exports = async function (changesets, releasePlan, options) {
   const result = await generateChangelog(changesets, releasePlan, options);
