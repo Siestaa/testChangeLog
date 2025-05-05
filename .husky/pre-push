@@ -57,7 +57,7 @@ if [ -z "$FILE_CONTENT" ] || [ "$FILE_CONTENT" = "-----" ]; then
 ---
 "test-changelog-vite": $COMMIT_TYPE
 ---
-summary: $COMMIT_MSG
+$COMMIT_DESCRIPTION
 ---
 EOL
 
