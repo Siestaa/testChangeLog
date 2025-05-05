@@ -1,4 +1,4 @@
 ---
-"test-changelog-vite": major
+"test-changelog-vite": patch
 ---
-testiruem
+changelog update
