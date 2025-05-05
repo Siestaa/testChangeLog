@@ -15,8 +15,10 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   npx changeset
 
   # Добавляем задержку (например, 2 секунды)
-  echo "⏳ Ждём 2 секунды перед добавлением changeset-файла..."
-  sleep 2
+  echo "⏳ Ожидаем появления нужного файла..."
+while [ ! -f .changeset/*.md ]; do
+  sleep 1
+done
 
   git add .changeset/*.md
   echo "✅ changeset создан и добавлен в коммит"
