@@ -53,7 +53,10 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
 
   if [[ -z "$commit_type" || "$valid_types" != *" $commit_type "* ]]; then
   commit_type="patch"
-  fi
+  echo "📎 Тип коммита не указан или некорректен — установлен тип по умолчанию: $commit_type"
+else
+  echo "📎 Тип коммита: $commit_type"
+fi
 
   awk 'NR == 1 { print "---\n" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
   awk -v type="$commit_type" 'NR == 2 { print "\"test-changelog-vite\": " type } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"  awk 'NR == 3 { print "---\n" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"

@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-git add .
 
 if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
   echo "✅ Хук пропущен (использован --no-verify)"
@@ -23,6 +22,9 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   CHANGESET_FILE=$(find "$CHANGESET_DIR" -type f -name "*.md" -printf "%T@ %p\n" | sort -n | tail -1 | cut -f2- -d' ')
 
   truncate -s 0 "$CHANGESET_FILE" 2>/dev/null || > "$CHANGESET_FILE"
+
+
+  git add .
 
   # Получаем путь к последнему файлу
   
