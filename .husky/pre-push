@@ -68,6 +68,7 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   if [ -n "$CURRENT_BRANCH" ]; then
     echo "📤 Выполняем git push origin $CURRENT_BRANCH"
     git push origin "$CURRENT_BRANCH" --no-verify
+    echo "Success"
   else
     echo "❌ Не удалось определить текущую ветку для git push"
     exit 1
