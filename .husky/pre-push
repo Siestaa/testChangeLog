@@ -18,6 +18,7 @@ else
   echo "⚠️ Не удалось найти .git/COMMIT_EDITMSG"
 fi
 
+
 # Получаем текущую ветку
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
@@ -48,7 +49,7 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
     FILE_LINES=$((FILE_LINES + 1))
   done 
 
-  commit_type="${COMMIT_MSG%%:*}" || "patch"
+  commit_type="${COMMIT_MSG%%:*}"
   commit_description="${COMMIT_MSG#*: }" 
 
   valid_types=" patch minor major "
