@@ -1,0 +1,22 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Путь к файлу с сообщением коммита
+COMMIT_MSG_FILE=$1
+
+# Читаем сообщение коммита
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Проверяем формат сообщения
+echo "$COMMIT_MSG" | grep -E '^([pP]atch|[mM]inor|[mM]ajor): .+' > /dev/null 2>&1
+
+if [ $? -ne 0 ]; then
+  echo "❌ Ошибка: Сообщение коммита должно быть в формате 'type: text', где type — patch, minor или major"
+  echo "✅ Примеры корректных коммитов:"
+  echo "  patch: fix bug in login flow"
+  echo "  minor: add new feature for auth"
+  echo "  major: breaking changes in API"
+  exit 1
+fi
+
+echo "✅ Сообщение коммита прошло валидацию"

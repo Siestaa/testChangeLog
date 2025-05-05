@@ -46,13 +46,12 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
     FILE_LINES=$((FILE_LINES + 1))
   done 
 
-  # Добавляем строку на 2-ю позицию
-  awk 'NR == 1 { print "---\n" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
-  awk 'NR == 2 { print "\"test-changelog-vite\": patch" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
-  awk 'NR == 3 { print "---\n" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
+  commit_type="${COMMIT_MSG%%:*}"
+  commit_description="${COMMIT_MSG#*: }" 
 
-  # Добавляем сообщение коммита на 5-ю позицию
-  awk -v msg="$COMMIT_MSG" 'NR == 5 { print msg } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
+  awk 'NR == 1 { print "---\n" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
+  awk -v type="$commit_type" 'NR == 2 { print "\"test-changelog-vite\": " type } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"  awk 'NR == 3 { print "---\n" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
+  awk -v msg="$commit_description" 'NR == 5 { print msg } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 
   git pull
 
