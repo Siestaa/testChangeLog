@@ -6,5 +6,5 @@
 ---
 
 
-changelog update
+update
 
