@@ -52,8 +52,12 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   # Добавляем сообщение коммита на 5-ю позицию
   awk -v msg="$COMMIT_MSG" 'NR == 5 { print msg } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 
+  git pull
+
   # Добавляем изменённый changeset-файл в коммит
-  git add "$CHANGESET_FILE"
+  git add .
+
+  git commit "changelog update" --no-verify
 
   # Получаем имя текущей ветки
   CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
