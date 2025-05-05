@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           registry-url: https://registry.npmjs.org/
       - name: install
         run: npm install
@@ -34,8 +34,8 @@ jobs:
           # my release & version-packages:
           # "release": "npm run build && changeset publish",
           # "version-packages": "changeset version && npm run prettier"
-          publish: npm run release
-          version: npm run version-packages
+          publish: yarn changeset:publish
+          version: yarn changeset:version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
