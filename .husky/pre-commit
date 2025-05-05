@@ -6,6 +6,8 @@ if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
   exit 0
 fi
 
+echo "$HUSKY_GIT_PARAMS" | grep -q ' -m ';
+
 # Получаем текущую ветку
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
@@ -27,7 +29,6 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   # Получаем сообщение **последнего коммита**
   COMMIT_MSG=$(git log -1 --pretty=%B)
 
-  # Добавляем минимум 5 строк, если их нет
   FILE_LINES=$(wc -l < "$CHANGESET_FILE")
   while [ $FILE_LINES -lt 5 ]; do
     echo "" >> "$CHANGESET_FILE"
