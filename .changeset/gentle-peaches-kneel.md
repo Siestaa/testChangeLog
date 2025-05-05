@@ -1,4 +1,4 @@
 ---
-"test-changelog-vite": minor
+"test-changelog-vite": major
 ---
-add some text
+fix git hooks
