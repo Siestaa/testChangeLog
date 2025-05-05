@@ -1,5 +1,11 @@
 # test-changelog-vite
 
+## 3.0.0
+
+### Major Changes
+
+- ## 76eaaec: fix something
+
 ## 2.2.0
 
 ### Minor Changes
