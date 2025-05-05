@@ -26,6 +26,8 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   # Получаем сообщение коммита
   COMMIT_MSG=$(git log -1 --pretty=%B)
 
+  sleep 1
+
   # Добавляем минимум 5 строк, если их нет
   FILE_LINES=$(wc -l < "$CHANGESET_FILE")
   while [ $FILE_LINES -lt 5 ]; do
