@@ -20,12 +20,6 @@ fi
 COMMIT_MSG=$(git log -1 --pretty=%B)
 echo "📎 Сообщение последнего коммита: $COMMIT_MSG"
 
-# Пропускаем, если это changelog update
-if echo "$COMMIT_MSG" | grep -q '^changelog update'; then
-  echo "🔄 Это changelog update — пропускаем"
-  exit 0
-fi
-
 # Парсим тип и описание
 COMMIT_TYPE="${COMMIT_MSG%%:*}"
 COMMIT_TYPE=$(echo "$COMMIT_TYPE" | tr '[:upper:]' '[:lower:]')
@@ -60,6 +54,32 @@ if [ -z "$FILE_CONTENT" ] || [ "$FILE_CONTENT" = "-----" ]; then
 $COMMIT_DESCRIPTION
 ---
 EOL
+
+ALL_CHANGESET_FILES=$(find "$CHANGESET_DIR" -type f -name "*.md" ! -path "$CHANGESET_FILE")
+CURRENT_CONTENT=$(cat "$CHANGESET_FILE" | grep -v '^$' | grep -v '^---$' | sed 's/[[:space:]]*$//')
+
+# Проверяем на дублирование
+DUPLICATES_FOUND=false
+for OTHER_FILE in $ALL_CHANGESET_FILES; do
+  OTHER_CONTENT=$(cat "$OTHER_FILE" | grep -v '^$' | grep -v '^---$' | sed 's/[[:space:]]*$//')
+
+  if [ "$CURRENT_CONTENT" = "$OTHER_CONTENT" ]; then
+    echo "❌ Найден дублирующий файл: $OTHER_FILE"
+    DUPLICATES_FOUND=true
+    break
+  fi
+done
+
+# Блокируем пуш, если найдены дубликаты
+if $DUPLICATES_FOUND; then
+  echo "🚫 Найден дублирующий changeset-файл — удаляем текущий файл"
+  
+  # Удаляем текущий дубликат
+  rm -f "$CHANGESET_FILE"
+  exit 0
+fi
+
+echo "✅ changeset-файл уникален — пуш разрешён"
 
   git add "$CHANGESET_FILE"
   git commit -m "changelog update" --no-verify
