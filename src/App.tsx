@@ -14,6 +14,7 @@ function App() {
      <div className="">Special Text</div>
      <div className="">Final test</div>
      <div className="">Test pre commit</div>
+     <div className="">new test</div>
     </>
   )
 }
