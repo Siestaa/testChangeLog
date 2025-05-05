@@ -1,10 +1,10 @@
 ---
 
 
-"test-changelog-vite": patch
+"test-changelog-vite": major
 
 ---
 
 
-update
+test 1
 
