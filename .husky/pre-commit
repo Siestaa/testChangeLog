@@ -1,7 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-# Проверяем, есть ли флаг --no-verify
 if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
   echo "✅ Хук пропущен (использован --no-verify)"
   exit 0
@@ -11,9 +10,9 @@ fi
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
 # Проверяем, начинается ли ветка с "feature/"
-if [[ "$CURRENT_BRANCH" == feature/* ]]; then
-  echo "🔄 Запускаем yarn changeset:create для ветки $CURRENT_BRANCH"
-  yarn changeset create
+if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
+  echo "🔄 Запускаем npx changeset для ветки $CURRENT_BRANCH"
+  yarn changeset:create
   git add .changeset/*.md
   echo "✅ changeset создан и добавлен в коммит"
 else
