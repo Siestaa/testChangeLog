@@ -5,6 +5,7 @@
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 if ! echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
+  echo "ℹ️ Ветка $CURRENT_BRANCH не соответствует pattern 'feature/*' — changeset не создаётся"
   exit 0
 fi
 
