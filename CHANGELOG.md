@@ -1,5 +1,25 @@
 # test-changelog-vite
 
+## 1.0.0
+
+### Major Changes
+
+- fb2391e: Test first major
+
+### Minor Changes
+
+- 969b928: test final
+
+### Patch Changes
+
+- 906a958: asd
+- 906a958: Test
+- 906a958: dfgdfg
+- 906a958: ыф
+- 906a958: sdf
+- 906a958: Тест
+- 906a958: sdf
+
 ## 0.1.0
 
 ### Minor Changes
