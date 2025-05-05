@@ -1,5 +1,11 @@
 # test-changelog-vite
 
+## 2.2.0
+
+### Minor Changes
+
+- ## 15e9e53: summary: minor: fix git hooks
+
 ## 2.1.0
 
 ### Minor Changes
