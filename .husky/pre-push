@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+git pull
+
 # Проверяем, есть ли флаг --no-verify
 if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
   echo "✅ Хук пропущен (использован --no-verify)"
@@ -54,9 +56,9 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   if [[ -z "$commit_type" || "$valid_types" != *" $commit_type "* ]]; then
   commit_type="patch"
   echo "📎 Тип коммита не указан или некорректен — установлен тип по умолчанию: $commit_type"
-else
+  else
   echo "📎 Тип коммита: $commit_type"
-fi
+  fi
 
   awk 'NR == 1 { print "---\n" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
   awk -v type="$commit_type" 'NR == 2 { print "\"test-changelog-vite\": " type } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"  awk 'NR == 3 { print "---\n" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
