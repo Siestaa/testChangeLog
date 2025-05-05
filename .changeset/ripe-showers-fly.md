@@ -1,10 +1,10 @@
 ---
 
 
-"test-changelog-vite": minor
+"test-changelog-vite": patch
 
 ---
 
 
-pupupu
+changelog update
 
