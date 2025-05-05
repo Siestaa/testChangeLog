@@ -3,10 +3,11 @@
 
 # Автоматически устанавливаем upstream для ветки
 current_branch=$(git rev-parse --abbrev-ref HEAD)
-if ! git rev-parse --abbrev-ref "$current_branch@{upstream}" >/dev/null 2>&1; then
-  echo "🔄 Устанавливаем upstream для ветки $current_branch"
-  git branch --set-upstream-to=origin/"$current_branch" "$current_branch"
-fi
+
+if echo "$CURRENT_BRANCH" | grep != '^feature/'; then
+  exit 0
+fi 
+
 
 # Проверяем, есть ли флаг --no-verify
 if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
