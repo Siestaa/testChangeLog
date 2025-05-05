@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-git add .
 
 if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
   echo "✅ Хук пропущен (использован --no-verify)"
@@ -24,7 +23,9 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
 
   truncate -s 0 "$CHANGESET_FILE" 2>/dev/null || > "$CHANGESET_FILE"
 
-  # Получаем путь к последнему файлу
+  git add .
+
+  git push origin "$CURRENT_BRANCH"
   
   echo "✅ changeset создан и изменён"
 else
