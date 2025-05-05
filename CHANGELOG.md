@@ -1,5 +1,19 @@
 # test-changelog-vite
 
+## 2.1.0
+
+### Minor Changes
+
+- dda9409: add fix text
+- 72480d8: add testiruem text
+
+### Patch Changes
+
+- 2f1be3e: add testttt more
+- d2eed50: fix md
+- 5218149: fix MD
+- efb635e: add more text
+
 ## 2.0.0
 
 ### Major Changes
