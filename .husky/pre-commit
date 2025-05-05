@@ -14,20 +14,22 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   echo "🔄 Запускаем npx changeset для ветки $CURRENT_BRANCH"
   npx changeset --empty
 
+  # Ждём появления файла
   sleep 1
-
+  
   # Получаем путь к последнему созданному файлу
-  CHANGESET_FILE=$(find .changeset -type f -name "*.md" | sort -r | head -n 1)
+  CHANGESET_DIR=$(pwd)/.changeset
+  CHANGESET_FILE=$(find "$CHANGESET_DIR" -type f -name "*.md" -printf "%T@ %p\n" | sort -n | tail -1 | cut -f2- -d" ")
+
+  echo "📄 Найден файл: $CHANGESET_FILE"
 
   # Получаем сообщение коммита
   COMMIT_MSG=$(git log -1 --pretty=%B)
 
-  echo "📄 Изменяем файл: $CHANGESET_FILE"
+  # Добавляем строку на 2-ю позицию через awk
+  awk 'NR == 2 { print "\"test-changelog-vite\": patch" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 
-  # Добавляем строку на 2-ю позицию
-awk 'NR == 2 { print "\"test-changelog-vite\": patch" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
-
-  # Добавляем сообщение на 5-ю позицию
+  # Добавляем сообщение на 5-ю позицию через awk
   awk -v msg="$COMMIT_MSG" 'NR == 5 { print msg } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 
   git add "$CHANGESET_FILE"
