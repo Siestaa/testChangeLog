@@ -12,6 +12,14 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 # Проверяем, начинается ли ветка с "feature/"
 if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   echo "🔄 Запускаем npx changeset для ветки $CURRENT_BRANCH"
+
+  if [ -f ".git/COMMIT_EDITMSG" ]; then
+    COMMIT_MSG=$(cat .git/COMMIT_EDITMSG)
+  else
+    COMMIT_MSG="feat: unknown commit message"
+    echo "⚠️ Не удалось найти .git/COMMIT_EDITMSG"
+  fi
+  
   npx changeset --empty
 
   # Ждём появления файла
@@ -23,19 +31,11 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
 
   echo "📄 Найден файл: $CHANGESET_FILE"
 
-  # Получаем сообщение коммита
-  COMMIT_MSG=$(git log -1 --pretty=%B)
-
-  sleep 1
-
-  # Добавляем минимум 5 строк, если их нет
   FILE_LINES=$(wc -l < "$CHANGESET_FILE")
   while [ $FILE_LINES -lt 5 ]; do
     echo "" >> "$CHANGESET_FILE"
     FILE_LINES=$((FILE_LINES + 1))
   done
-
-  echo "📄 Файл дополнен до 5 строк"
 
   # Добавляем строку на 2-ю позицию через awk
   awk 'NR == 2 { print "\"test-changelog-vite\": patch" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
