@@ -1,4 +1,4 @@
 ---
 "test-changelog-vite": patch
 ---
-test
+changelog update
