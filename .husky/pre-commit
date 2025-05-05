@@ -14,8 +14,6 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   echo "🔄 Запускаем npx changeset для ветки $CURRENT_BRANCH"
   npx changeset
 
-  sleep 10
-
   git add .changeset/*.md
   echo "✅ changeset создан и добавлен в коммит"
 else

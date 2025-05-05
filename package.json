@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@changesets/changelog-git": "^0.2.1",
+    "@changesets/changelog-github": "^0.5.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
