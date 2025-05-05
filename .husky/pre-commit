@@ -12,9 +12,7 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 # Проверяем, начинается ли ветка с "feature/"
 if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   echo "🔄 Запускаем npx changeset для ветки $CURRENT_BRANCH"
-  npx changeset --message 'feat: text'
-
-  sleep 5
+  npx changeset --empty
 
   git add .changeset/*.md
   echo "✅ changeset создан и добавлен в коммит"
