@@ -1,3 +1,0 @@
----
-"test-changelog-vite": patch
----

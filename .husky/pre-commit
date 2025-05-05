@@ -43,4 +43,5 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   git add "$CHANGESET_FILE"
   echo "✅ changeset создан и изменён"
 else
-  echo "ℹ️ Ветка $CURRENT_BRANCH не соответствует pattern
+  echo "ℹ️ Ветка $CURRENT_BRANCH не соответствует pattern"
+fi
