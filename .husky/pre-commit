@@ -1,6 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+echo "📎 HUSKY_GIT_PARAMS: $HUSKY_GIT_PARAMS"
+
 if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
   echo "✅ Хук пропущен (использован --no-verify)"
   exit 0
