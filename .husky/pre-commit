@@ -1,6 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+git add .
+
 if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
   echo "✅ Хук пропущен (использован --no-verify)"
   exit 0
@@ -13,13 +15,15 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   echo "🔄 Запускаем npx changeset для ветки $CURRENT_BRANCH"
 
+  sleep 1
+
   if [ -f ".git/COMMIT_EDITMSG" ]; then
     COMMIT_MSG=$(cat .git/COMMIT_EDITMSG)
   else
     COMMIT_MSG="feat: unknown commit message"
     echo "⚠️ Не удалось найти .git/COMMIT_EDITMSG"
   fi
-  
+
   npx changeset --empty
 
   # Ждём появления файла
