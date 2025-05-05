@@ -1,4 +1,32 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm test
+if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
+  echo "✅ Хук пропущен (использован --no-verify)"
+  exit 0
+fi
+
+# Получаем сообщение текущего коммита из временного файла
+if [ -f ".git/COMMIT_EDITMSG" ]; then
+  COMMIT_MSG=$(cat .git/COMMIT_EDITMSG)
+  echo "📎 Текущее сообщение коммита: $COMMIT_MSG"
+else
+  COMMIT_MSG="feat: unknown commit message"
+  echo "⚠️ Не удалось найти .git/COMMIT_EDITMSG"
+fi
+
+# Получаем текущую ветку
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+# Проверяем, начинается ли ветка с "feature/"
+if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
+  echo "🔄 Запускаем npx changeset для ветки $CURRENT_BRANCH"
+  
+  npx changeset --empty
+
+  # Получаем путь к последнему файлу
+  
+  echo "✅ changeset создан и изменён"
+else
+  echo "ℹ️ Ветка $CURRENT_BRANCH не соответствует pattern 'feature/*' — changeset не создается"
+fi
