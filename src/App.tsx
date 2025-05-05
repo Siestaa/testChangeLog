@@ -34,7 +34,7 @@ function App() {
      <div className="">testiruem</div>
      <div className="">testttt more</div>
      <div className="">testttt more</div>
-     <div className="">some text</div>
+     <div className="">some tesssxt</div>
     </>
   )
 }
