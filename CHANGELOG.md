@@ -1,5 +1,12 @@
 # test-changelog-vite
 
+## 1.0.1
+
+### Patch Changes
+
+- af85238: test 39
+- e6f79b8: test 40
+
 ## 1.0.0
 
 ### Major Changes
