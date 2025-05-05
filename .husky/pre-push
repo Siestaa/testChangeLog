@@ -66,6 +66,7 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   NR == 5 { print msg }
   { print }
   ' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
+  awk 'NF' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 
   # Добавляем файл и делаем коммит
   git add "$CHANGESET_FILE"

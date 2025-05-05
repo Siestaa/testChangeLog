@@ -1,10 +1,4 @@
 ---
-
-
 "test-changelog-vite": patch
-
 ---
-
-
-changelog update
-
+fix md files
