@@ -1,5 +1,24 @@
 # test-changelog-vite
 
+## 2.0.0
+
+### Major Changes
+
+- f5a60f9: testiruem
+
+### Minor Changes
+
+- 1f018e3: add fix test
+
+### Patch Changes
+
+- 985b9d4: testiruem
+- febcb4f: changelog update
+- ae5c8c0: testttt more
+- 7991faa: fix changelog
+- Merge branch 'main' into feature/testttt
+- Merge branch 'main' into feature/testiruem
+
 ## 1.0.2
 
 ### Patch Changes

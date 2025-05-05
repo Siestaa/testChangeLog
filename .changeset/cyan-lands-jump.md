@@ -1,4 +1,4 @@
 ---
 "test-changelog-vite": minor
 ---
-add fix test
+add fix text
