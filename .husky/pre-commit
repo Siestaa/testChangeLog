@@ -40,6 +40,7 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
 
   if [ -f ".git/COMMIT_EDITMSG" ]; then
     COMMIT_MSG=$(cat .git/COMMIT_EDITMSG)
+    echo "⚠️ Коммит: $COMMIT_MSG"
   else
     COMMIT_MSG="feat: unknown commit message"
     echo "⚠️ Не удалось найти .git/COMMIT_EDITMSG"
