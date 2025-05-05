@@ -1,2 +1,32 @@
 #!/usr/bin/env sh
-npx husky run pre-commit
+. "$(dirname -- "$0")/_/husky.sh"
+
+git add .
+
+if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
+  echo "✅ Хук пропущен (использован --no-verify)"
+  exit 0
+fi
+
+# Получаем текущую ветку
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+# Проверяем, начинается ли ветка с "feature/"
+if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
+  echo "🔄 Запускаем npx changeset для ветки $CURRENT_BRANCH"
+  
+  npx changeset --empty
+
+  sleep 1
+
+  CHANGESET_DIR=$(pwd)/.changeset
+  CHANGESET_FILE=$(find "$CHANGESET_DIR" -type f -name "*.md" -printf "%T@ %p\n" | sort -n | tail -1 | cut -f2- -d' ')
+
+  truncate -s 0 "$CHANGESET_FILE" 2>/dev/null || > "$CHANGESET_FILE"
+
+  # Получаем путь к последнему файлу
+  
+  echo "✅ changeset создан и изменён"
+else
+  echo "ℹ️ Ветка $CURRENT_BRANCH не соответствует pattern 'feature/*' — changeset не создается"
+fi
