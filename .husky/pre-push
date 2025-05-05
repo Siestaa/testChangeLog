@@ -40,12 +40,6 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
     exit 0
   fi
 
-  FILE_LINES=$(wc -l < "$CHANGESET_FILE" 2>/dev/null || echo 0)
-  while [ "$FILE_LINES" -lt 5 ]; do
-    echo "" >> "$CHANGESET_FILE"
-    FILE_LINES=$((FILE_LINES + 1))
-  done
-
   # Добавляем строку на 2-ю позицию
   awk 'NR == 2 { print "\"test-changelog-vite\": patch" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 

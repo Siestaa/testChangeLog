@@ -24,6 +24,17 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   
   npx changeset --empty
 
+  sleep 1
+
+  FILE_LINES=$(wc -l < "$CHANGESET_FILE" 2>/dev/null || echo 0)
+  while [ "$FILE_LINES" -lt 5 ]; do
+    echo "" >> "$CHANGESET_FILE"
+    FILE_LINES=$((FILE_LINES + 1))
+  done
+
+  CHANGESET_DIR=$(pwd)/.changeset
+  CHANGESET_FILE=$(find "$CHANGESET_DIR" -type f -name "*.md" -printf "%T@ %p\n" | sort -n | tail -1 | cut -f2- -d' ')
+
   # Получаем путь к последнему файлу
   
   echo "✅ changeset создан и изменён"
