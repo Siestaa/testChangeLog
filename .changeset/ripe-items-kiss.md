@@ -2,6 +2,6 @@
 "test-changelog-vite": patch
 ---
 
-test 3
+test 4
 
 
