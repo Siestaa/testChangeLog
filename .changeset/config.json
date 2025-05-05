@@ -1,5 +1,5 @@
 {
-  "changelog": "./custom-changelog.cjs",
+  "changelog": "@changesets/changelog-github",
   "commit": false,
   "fixed": [],
   "linked": [],
