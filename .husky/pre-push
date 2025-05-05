@@ -4,9 +4,9 @@
 # Автоматически устанавливаем upstream для ветки
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-if echo "$CURRENT_BRANCH" | grep != '^feature/'; then
+if ! echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   exit 0
-fi 
+fi
 
 
 # Проверяем, есть ли флаг --no-verify
