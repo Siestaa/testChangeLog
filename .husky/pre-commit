@@ -18,7 +18,8 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   sleep 1
 
   # Получаем путь к последнему файлу
-  CHANGESET_FILE=$(find .changeset -type f -name "*.md" | sort -r | head -n 1)
+  CHANGESET_DIR=$(pwd)/.changeset
+  CHANGESET_FILE=$(find "$CHANGESET_DIR" -type f -name "*.md" -printf "%T@ %p\n" | sort -n | tail -1 | cut -f2- -d" ")
 
   echo "📄 Найден файл: $CHANGESET_FILE"
 
