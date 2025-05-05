@@ -12,7 +12,7 @@ jobs:
           node-version: 18
           registry-url: https://registry.npmjs.org/
       - run: npm install
-      - uses: changesets/action@v2
+      - uses: changesets/action@65e32723e4e38a11889c0dce18783be5415a5203
         with:
           commit: "chore: update versions"
           title: "chore: release new versions"
