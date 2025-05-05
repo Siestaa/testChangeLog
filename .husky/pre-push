@@ -1,7 +1,12 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-git pull
+# Автоматически устанавливаем upstream для ветки
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+if ! git rev-parse --abbrev-ref "$current_branch@{upstream}" >/dev/null 2>&1; then
+  echo "🔄 Устанавливаем upstream для ветки $current_branch"
+  git branch --set-upstream-to=origin/"$current_branch" "$current_branch"
+fi
 
 # Проверяем, есть ли флаг --no-verify
 if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
@@ -9,7 +14,7 @@ if [ "$HUSKY_GIT_PARAMS" = "--no-verify" ]; then
   exit 0
 fi
 
-# Получаем текущее сообщение коммита
+# Получаем сообщение коммита
 if [ -f ".git/COMMIT_EDITMSG" ]; then
   COMMIT_MSG=$(cat .git/COMMIT_EDITMSG)
   echo "📎 Текущее сообщение коммита: $COMMIT_MSG"
@@ -18,6 +23,15 @@ else
   echo "⚠️ Не удалось найти .git/COMMIT_EDITMSG"
 fi
 
+# Парсим тип коммита
+commit_type="${COMMIT_MSG%%:*}"
+commit_type=$(echo "$commit_type" | tr '[:upper:]' '[:lower:]')
+
+# Проверяем, является ли тип допустимым
+case "$commit_type" in
+  patch|minor|major) ;;
+  *) commit_type="patch"; echo "📎 Тип коммита не указан или некорректен — установлен тип по умолчанию: $commit_type" ;;
+esac
 
 # Получаем текущую ветку
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
@@ -25,57 +39,37 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 # Проверяем, начинается ли ветка с "feature/"
 if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
   echo "🔄 Выполняем логику changeset для ветки $CURRENT_BRANCH"
-  
+
   # Получаем путь к последнему файлу changeset
   CHANGESET_DIR=$(pwd)/.changeset
   CHANGESET_FILE=$(find "$CHANGESET_DIR" -type f -name "*.md" -printf "%T@ %p\n" | sort -n | tail -1 | cut -f2- -d' ')
 
-  # Проверяем, существует ли файл и не пустой ли он
-  if [ -f "$CHANGESET_FILE" ]; then
-    if [ -s "$CHANGESET_FILE" ]; then
-      echo "📄 changeset-файл найден и не пустой — изменения не вносятся"
-      exit 0
-    else
-      echo "📄 changeset-файл найден, но пустой — продолжаем обработку"
-    fi
-  else
-    echo "📄 changeset-файл не найден — ошибка"
-    exit 0
+  # Проверяем, существует ли файл
+  if [ ! -f "$CHANGESET_FILE" ]; then
+    echo "❌ changeset-файл не найден — ошибка"
+    exit 1
   fi
 
-  FILE_LINES=$(wc -l < "$CHANGESET_FILE" 2>/dev/null || echo 0)
-  while [ "$FILE_LINES" -lt 5 ]; do
+  # Очищаем файл и создаём 5 строк
+  > "$CHANGESET_FILE"
+  for i in $(seq 1 5); do
     echo "" >> "$CHANGESET_FILE"
-    FILE_LINES=$((FILE_LINES + 1))
-  done 
+  done
 
-  commit_type="${COMMIT_MSG%%:*}"
-  commit_description="${COMMIT_MSG#*: }" 
+  # Добавляем содержимое через один вызов awk
+  awk -v type="$commit_type" -v msg="$commit_description" '
+  NR == 1 { print "---\n" }
+  NR == 2 { print "\"test-changelog-vite\": " type }
+  NR == 3 { print "---" }
+  NR == 5 { print msg }
+  { print }
+  ' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 
-  valid_types=" patch minor major "
-
-  if [[ -z "$commit_type" || "$valid_types" != *" $commit_type "* ]]; then
-  commit_type="patch"
-  echo "📎 Тип коммита не указан или некорректен — установлен тип по умолчанию: $commit_type"
-  else
-  echo "📎 Тип коммита: $commit_type"
-  fi
-
-  awk 'NR == 1 { print "---\n" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
-  awk -v type="$commit_type" 'NR == 2 { print "\"test-changelog-vite\": " type } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"  awk 'NR == 3 { print "---\n" } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
-  awk -v msg="$commit_description" 'NR == 5 { print msg } { print }' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
-
-  git pull
-
-  # Добавляем изменённый changeset-файл в коммит
-  git add .
-
+  # Добавляем файл и делаем коммит
+  git add "$CHANGESET_FILE"
   git commit -m "changelog update" --no-verify
 
-  # Получаем имя текущей ветки
-  CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-
-  # Выполняем git push
+  # Выполняем push
   if [ -n "$CURRENT_BRANCH" ]; then
     echo "📤 Выполняем git push origin $CURRENT_BRANCH"
     git push origin "$CURRENT_BRANCH" --no-verify
