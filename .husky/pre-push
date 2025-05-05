@@ -52,15 +52,21 @@ if echo "$CURRENT_BRANCH" | grep -q '^feature/'; then
     exit 1
   fi
 
+  # Очищаем файл и создаём 5 строк
+  > "$CHANGESET_FILE"
+  for i in $(seq 1 5); do
+    echo "" >> "$CHANGESET_FILE"
+  done
+
   # Добавляем содержимое через один вызов awk
   awk -v type="$commit_type" -v msg="$commit_description" '
   NR == 1 { print "---\n" }
   NR == 2 { print "\"test-changelog-vite\": " type }
   NR == 3 { print "---" }
-  NR == 4 { print "\n" }
   NR == 5 { print msg }
   { print }
   ' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
+  awk 'NF' "$CHANGESET_FILE" > "$CHANGESET_FILE.tmp" && mv "$CHANGESET_FILE.tmp" "$CHANGESET_FILE"
 
   # Добавляем файл и делаем коммит
   git add "$CHANGESET_FILE"
