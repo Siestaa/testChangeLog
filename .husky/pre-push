@@ -24,6 +24,17 @@ else
   echo "⚠️ Не удалось найти .git/COMMIT_EDITMSG"
 fi
 
+if echo "$COMMIT_MSG" | grep -q '^Merge'; then
+  echo "🗑️ Обнаружен merge-коммит — удаляем все changeset-файлы"
+  
+  # Удаляем все .changeset/*.md файлы
+  if [ -d ".changeset" ]; then
+    rm -f .changeset/*.md 2>/dev/null || echo "ℹ️ changeset-файлов нет — пропускаем удаление"
+  fi
+
+  exit 0
+fi
+
 # Парсим тип коммита
 commit_type="${COMMIT_MSG%%:*}"
 commit_type=$(echo "$commit_type" | tr '[:upper:]' '[:lower:]')
