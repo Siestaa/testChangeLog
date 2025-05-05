@@ -76,7 +76,6 @@ if $DUPLICATES_FOUND; then
   
   # Удаляем текущий дубликат
   rm -f "$CHANGESET_FILE"
-  exit 0
 fi
 
 echo "✅ changeset-файл уникален — пуш разрешён"
