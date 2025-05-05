@@ -26,6 +26,7 @@ fi
 # Парсим тип коммита
 commit_type="${COMMIT_MSG%%:*}"
 commit_type=$(echo "$commit_type" | tr '[:upper:]' '[:lower:]')
+commit_description=$(echo "$COMMIT_MSG" | sed -E 's/^[^:]+: ?//; s/[[:space:]]+$//')
 
 # Проверяем, является ли тип допустимым
 case "$commit_type" in
